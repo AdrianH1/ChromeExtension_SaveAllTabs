@@ -3,7 +3,8 @@
     "name": "Chrome Save All Tabs",
     "permissions": [
         "tabs",
-        "bookmarks"
+        "bookmarks",
+        "storage"
     ],
     "version": "0.1",
     "content_scripts": [
@@ -18,6 +19,8 @@
         "scripts": ["background.js"]
     },
     "browser_action": {
-        "default_icon": "asdf.jpg"
-    }
+        "default_icon": "ct.png",
+        "default_popup": "popup/index.html",
+        "default_title": "Lookup a definition!"
+  }
 }
