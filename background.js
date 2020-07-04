@@ -1,4 +1,5 @@
 WindowIDs();
+getFolders();
 
 function WindowIDs(){
     
@@ -9,28 +10,31 @@ function WindowIDs(){
     chrome.tabs.query(params, getWindowIDs);
     
     function getWindowIDs(tabs){
-        let WindowID = tabs[0].windowId;
+        
+        let WindowID= [];
+        
+        for (i=0; i < tabs.length; i++){
+            if(!WindowID.includes(tabs[i].windowId)){
+                WindowID[WindowID.length] = tabs[i].windowId;
+            }
+        }
         console.log(WindowID);
     
-        var value = WindowID;
-        var value2 = "asdf";
-        chrome.storage.local.set({key: value, key2: value2}, function() {
-          console.log('Value is set to ' + value);
-          console.log('Value2 is set to ' + value2);
+        let ValueWindowID = WindowID;
+        chrome.storage.local.set({keyWindowID: ValueWindowID}, function() {
+          console.log('Value is set to ' + ValueWindowID);
         });
    }
 }
 
-function BookmarkTree(){
+function getFolders(){
     chrome.bookmarks.getTree(getTree);
     
     function getTree(tree){
-        console.log("test log tree");
         console.log(tree);
         
-        chrome.storage.local.get(['key', 'key2'], function(result) {
-          console.log('Value currently is ' + result.key);
-          console.log('Value2 currently is ' + result.key2);
+        chrome.storage.local.get(['keyWindowID'], function(result) {
+          console.log(result.keyWindowID);
         });
     }
 }
