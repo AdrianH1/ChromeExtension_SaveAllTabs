@@ -1,23 +1,18 @@
-Tabs();
-BookmarkTree();
+WindowIDs();
 
-function Tabs(){
+function WindowIDs(){
     
     let params = {
         windowType: 'normal'
     }
     
-    var tabURL;
+    chrome.tabs.query(params, getWindowIDs);
     
+    function getWindowIDs(tabs){
+        let WindowID = tabs[0].windowId;
+        console.log(WindowID);
     
-    chrome.tabs.query(params, getTabInfo);
-    
-   function getTabInfo(tabs){
-        tabURL = tabs[0].url.toString();
-        console.log(tabURL);
-        console.log(tabs[0]);
-    
-        var value = tabURL;
+        var value = WindowID;
         var value2 = "asdf";
         chrome.storage.local.set({key: value, key2: value2}, function() {
           console.log('Value is set to ' + value);
