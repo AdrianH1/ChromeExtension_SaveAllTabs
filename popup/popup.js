@@ -1,15 +1,81 @@
-console.log("test");
-
-/*main();
-
-function main(){
-
-    let parentId = '2';
+/*document.addEventListener('DOMContentLoaded', function () {
     
+    let params = {
+        windowType: 'normal'
+    }
+    let tabURL;
     
+    chrome.tabs.query(params, getTabInfo);
+    
+    function getTabInfo(tabs){
+        tabURL = tabs[0].url.toString();
+        console.log(tabURL);
+        console.log(tabs[0]);
+        
+        document.getElementById("test").innerHTML=tabURL;
+   }
+});*/
+
+document.addEventListener('DOMContentLoaded', function() {
+    var link = document.getElementById('deleteFolders');
+    // onClick's logic below:
+    link.addEventListener('click', function() {
+        deleteFolders();
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    var link = document.getElementById('createFolders');
+    // onClick's logic below:
+    link.addEventListener('click', function() {
+        createFolders();
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    var link = document.getElementById('createBookmarks');
+    // onClick's logic below:
+    link.addEventListener('click', function() {
+        createBookmarks();
+    });
+});
+
 //-------------------------------------------    
-//-----Tree for delete and create Folder-----
+//--------Function Delete Folders------------
 //-------------------------------------------
+function deleteFolders(){
+    let parentId = '2';
+
+    chrome.bookmarks.getChildren(parentId, foldersOld);
+    function foldersOld(treeOld){
+
+        let FolderIDOld = [];
+
+        for(i=0; i < treeOld.length; i++){
+            if(!FolderIDOld.includes(treeOld[i].id)){
+                FolderIDOld[FolderIDOld.length] = treeOld[i].id;
+            }
+        }
+
+            //Create Folders------------------------------------------------------
+        for (i = 0; i < FolderIDOld.length; i++){
+            let removeID = FolderIDOld[i];
+            chrome.bookmarks.removeTree(removeID);
+        }
+            //---------------------------------------------------------------------
+    }    
+}
+//-------------------------------------------    
+//-------------------END---------------------
+//-------------------------------------------
+
+
+//-------------------------------------------    
+//-----Function delete and create Folder-----
+//-------------------------------------------
+function createFolders(){
+    let parentId = '2';
+
     chrome.bookmarks.getChildren(parentId, foldersOld);
     function foldersOld(treeOld){
         console.log("---getFolders-Anfang old");
@@ -63,14 +129,17 @@ function main(){
             //---------------------------------------------------------------------
         }    
     }
-    
+}
 //-------------------------------------------    
 //-------------------END---------------------
 //-------------------------------------------
-    
+
 //-------------------------------------------    
 //-----Tree for create Bookmarks-------------
 //-------------------------------------------   
+function createBookmarks(){
+    let parentId = '2';
+    
     chrome.bookmarks.getChildren(parentId, folders);
     function folders(tree){
         console.log("---getFolders-Anfang");
@@ -83,9 +152,6 @@ function main(){
             }
         }
         console.log("folderid new: " + FolderID);
-
-        chrome.storage.local.set({keyFolderID: FolderID,}, function() {});
-        console.log("---getFolders-Ende");
   
         let params = {
             windowType: 'normal'
@@ -135,39 +201,22 @@ function main(){
                 }
 
             }
-            
-            console.log(TabsArray);
-            
-            chrome.storage.local.set({keyWindowID: WindowID, keyTabsArray: TabsArray}, function() {});
-            console.log("WindowsID: " + WindowID);
-            console.log("WindowsID Length: " + WindowID.length);
-            console.log("---getWindowID-Ende");
-        }
     
             //Create Bookmarks in specific Folder----------------------------------        
-            chrome.storage.local.get(['keyWindowID', 'keyFolderID', 'keyTabsArray'], function(result) {
+                console.log("folderid test: " + FolderID);
 
-                console.log(result.keyTabsArray);
+                console.log(TabsArray);
 
-                for (i = 0; i < result.keyTabsArray.length; i++){
-                    //console.log("parentid: " + result.keyTabsArray[i][0]);
-                    //console.log("folderid: " + result.keyFolderID[i]);
-                        //chrome.bookmarks.create({'parentId': result.keyTabsArray[i][0],
-                           //'title': result.keyTabsArray[i][1],
-                           //'url': result.keyTabsArray[i][2]});
+                for (i = 0; i < TabsArray.length; i++){
+                        chrome.bookmarks.create({'parentId': TabsArray[i][0],
+                           'title': TabsArray[i][1],
+                           'url': TabsArray[i][2]});
 
                 }
-            });
             //---------------------------------------------------------------------
         }
+    }
+}
 //-------------------------------------------    
 //-------------------END---------------------
 //-------------------------------------------
-    
-}*/
-
-
-
-
-
-
